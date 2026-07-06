@@ -5,13 +5,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 
-<title>虹学夏季野球大会(仮)｜運営</title>
+<title>虹学夏季野球大会（仮）｜運営</title>
 
 <style>
-
 :root{
   --navy:#05284d;
-  --red:#c91f28;
+  --red:#c52f32;
   --line:#d9dee6;
   --green:#17844d;
   --bg:#f4f6f8;
@@ -56,7 +55,7 @@ nav{
   display:flex;
   gap:8px;
   padding:12px;
-  overflow:auto;
+  overflow-x:auto;
   background:#fff;
   border-bottom:1px solid var(--line);
 }
@@ -68,6 +67,7 @@ nav button,
   padding:11px 16px;
   font-weight:700;
   cursor:pointer;
+  white-space:nowrap;
 }
 
 .tab{
@@ -160,15 +160,13 @@ textarea{
 
 .wheel-stage{
   position:relative;
-  display:grid;
-  place-items:center;
-}
-
-.wheel{
-  position:relative;
-
   width:min(360px,80vw);
   aspect-ratio:1;
+}
+
+.wheel-disc{
+  position:absolute;
+  inset:0;
 
   border-radius:50%;
 
@@ -190,20 +188,23 @@ textarea{
   transition:
     transform 2.2s cubic-bezier(.1,.7,.1,1);
 
-  overflow:hidden;
+  z-index:1;
 }
 
 
-/* ルーレット文字 */
+/* =========================
+   固定文字
+========================= */
+
+.wheel-labels{
+  position:absolute;
+  inset:0;
+  z-index:2;
+  pointer-events:none;
+}
 
 .wheel-label{
   position:absolute;
-
-  left:50%;
-  top:50%;
-
-  width:50%;
-  height:50%;
 
   color:#fff;
 
@@ -211,55 +212,53 @@ textarea{
   font-size:15px;
   line-height:1;
 
-  text-align:center;
+  white-space:nowrap;
 
   text-shadow:
     0 2px 4px #000a;
 
-  z-index:2;
-
-  white-space:nowrap;
-
-  transform-origin:left bottom;
-
-  display:flex;
-  align-items:center;
-  justify-content:flex-start;
-
-  padding-left:25%;
+  transform:translate(-50%,-50%);
 }
 
 
-/* 各マス中央 */
+/* 各マスの中央 */
 
 .label-1{
-  transform:rotate(30deg);
+  left:72%;
+  top:25%;
 }
 
 .label-2{
-  transform:rotate(90deg);
+  left:78%;
+  top:50%;
 }
 
 .label-3{
-  transform:rotate(150deg);
+  left:72%;
+  top:75%;
 }
 
 .label-4{
-  transform:rotate(210deg);
+  left:28%;
+  top:75%;
 }
 
 .label-5{
-  transform:rotate(270deg);
+  left:22%;
+  top:50%;
 }
 
 .label-6{
-  transform:rotate(330deg);
+  left:28%;
+  top:25%;
 }
 
 
-/* 中央野球ボール */
+/* =========================
+   中央野球ボール
+========================= */
 
-.wheel img{
+.wheel-ball{
   position:absolute;
 
   left:50%;
@@ -283,7 +282,9 @@ textarea{
 }
 
 
-/* 針 */
+/* =========================
+   針
+========================= */
 
 .pointer{
   font-size:34px;
@@ -318,6 +319,10 @@ textarea{
 /* =========================
    テーブル
 ========================= */
+
+.table-wrap{
+  overflow-x:auto;
+}
 
 table{
   width:100%;
@@ -385,6 +390,21 @@ th{
   font-weight:700;
 }
 
+.delete{
+  background:#e8edf3;
+  color:#a51f27;
+  border:0;
+  border-radius:8px;
+  padding:8px 12px;
+  font-weight:700;
+}
+
+hr{
+  border:0;
+  border-top:1px solid var(--line);
+  margin:18px 0;
+}
+
 
 /* =========================
    スマホ
@@ -396,12 +416,12 @@ th{
     grid-template-columns:1fr;
   }
 
-  .wheel{
+  .wheel-stage{
     width:min(330px,78vw);
   }
 
   .wheel-label{
-    font-size:13px;
+    font-size:14px;
   }
 
   header b{
@@ -410,59 +430,40 @@ th{
 
   #teamRows .teamline{
     display:grid;
-
-    grid-template-columns:
-      56px minmax(0,1fr);
-
+    grid-template-columns:56px minmax(0,1fr);
     gap:10px;
-
     align-items:center;
   }
 
   #teamRows .teamline>img{
     grid-column:1;
     grid-row:1;
-
     width:48px;
     height:48px;
   }
 
-  #teamRows .teamline>input:not([type]),
   #teamRows .teamline>input[type="text"]{
     grid-column:2;
     grid-row:1;
-
     min-width:0;
-
     margin:0;
   }
 
   #teamRows .teamline>input[type="file"]{
     grid-column:1 / -1;
     grid-row:2;
-
     width:100%;
     min-width:0;
-
     margin:4px 0 0;
   }
 
   #teamRows .teamline>button{
     grid-column:1 / -1;
     grid-row:3;
-
     width:100%;
-
-    padding:10px;
-
-    border:0;
-    border-radius:8px;
   }
-
 }
-
 </style>
-
 </head>
 
 
@@ -535,7 +536,6 @@ id="bat"
 class="page active"
 >
 
-
 <div class="grid">
 
 
@@ -576,8 +576,11 @@ class="teamline"
 
 <div
 id="wheel"
-class="wheel"
->
+class="wheel-disc"
+></div>
+
+
+<div class="wheel-labels">
 
 <span class="wheel-label label-1">
 三振
@@ -603,15 +606,14 @@ class="wheel"
 ホームラン
 </span>
 
+</div>
+
 
 <img
+class="wheel-ball"
 src="assets/baseball.png"
 alt=""
 >
-
-
-</div>
-
 
 </div>
 
@@ -619,10 +621,10 @@ alt=""
 <button
 id="spin"
 class="btn primary"
+style="margin-top:14px"
 >
 ルーレットを回す
 </button>
-
 
 </div>
 
@@ -630,12 +632,12 @@ class="btn primary"
 
 <div class="card result">
 
-<h3>
+<h2>
 結果
-</h3>
+</h2>
 
 <strong id="resultName">
-―
+—
 </strong>
 
 <div
@@ -644,22 +646,6 @@ class="score"
 ></div>
 
 <p id="totals"></p>
-
-</div>
-
-
-</div>
-
-
-
-<div
-class="card"
-style="margin-top:16px"
->
-
-<h3>
-コピー用メッセージ
-</h3>
 
 <textarea
 id="message"
@@ -676,6 +662,8 @@ class="btn secondary"
 </div>
 
 
+</div>
+
 </section>
 
 
@@ -689,88 +677,66 @@ id="rank"
 class="page"
 >
 
-
 <div class="card">
 
 <h2>
 チームランキング
 </h2>
 
+<div class="table-wrap">
+
 <table>
 
 <thead>
 
 <tr>
-
-<th>
-順位
-</th>
-
-<th>
-チーム
-</th>
-
-<th>
-得点
-</th>
-
+<th>順位</th>
+<th>チーム</th>
+<th>得点</th>
 </tr>
 
 </thead>
 
-
-<tbody id="teamRank"></tbody>
-
+<tbody id="teamRanking"></tbody>
 
 </table>
 
 </div>
 
+</div>
 
 
-<div
-class="card"
-style="margin-top:16px"
->
+<br>
+
+
+<div class="card">
 
 <h2>
 個人ランキング
 </h2>
 
+<div class="table-wrap">
+
 <table>
 
 <thead>
 
 <tr>
-
-<th>
-順位
-</th>
-
-<th>
-名前
-</th>
-
-<th>
-所属
-</th>
-
-<th>
-得点
-</th>
-
+<th>順位</th>
+<th>名前</th>
+<th>チーム</th>
+<th>得点</th>
 </tr>
 
 </thead>
 
-
-<tbody id="playerRank"></tbody>
-
+<tbody id="studentRanking"></tbody>
 
 </table>
 
 </div>
 
+</div>
 
 </section>
 
@@ -785,74 +751,59 @@ id="students"
 class="page"
 >
 
-
 <div class="card">
 
 <h2>
 生徒管理
 </h2>
 
-
-<div class="actions">
+<label>
+生徒名
+</label>
 
 <input
 id="studentName"
+type="text"
 placeholder="生徒名"
-style="flex:1;min-width:180px"
 >
 
-<select
-id="studentTeam"
-style="flex:1;min-width:180px"
-></select>
+<label>
+所属チーム
+</label>
+
+<select id="studentTeam"></select>
 
 <button
 id="addStudent"
-class="btn secondary"
+class="btn primary"
 >
 生徒を追加
 </button>
 
-</div>
+<hr>
 
+<div class="table-wrap">
 
 <table>
 
 <thead>
 
 <tr>
-
-<th>
-名前
-</th>
-
-<th>
-所属
-</th>
-
-<th>
-得点
-</th>
-
-<th>
-今日
-</th>
-
+<th>名前</th>
+<th>チーム</th>
+<th>得点</th>
 <th></th>
-
 </tr>
 
 </thead>
 
-
 <tbody id="studentRows"></tbody>
-
 
 </table>
 
-
 </div>
 
+</div>
 
 </section>
 
@@ -867,42 +818,34 @@ id="teams"
 class="page"
 >
 
-
 <div class="card">
 
 <h2>
 チーム管理
 </h2>
 
-
-<p class="small">
-ロゴは画像ファイルを選択するとブラウザ内へ保存されます。
-</p>
-
-
-<div class="actions">
+<label>
+チーム名
+</label>
 
 <input
 id="teamName"
+type="text"
 placeholder="チーム名"
-style="flex:1;min-width:180px"
 >
 
 <button
 id="addTeam"
-class="btn secondary"
+class="btn primary"
 >
 チームを追加
 </button>
 
-</div>
-
+<hr>
 
 <div id="teamRows"></div>
 
-
 </div>
-
 
 </section>
 
@@ -917,40 +860,50 @@ id="settings"
 class="page"
 >
 
-
 <div class="card">
 
 <h2>
 設定
 </h2>
 
-
 <p class="small">
-結果の確率は固定初期値です：
-三振20%、アウト25%、ヒット25%、
-二塁打15%、三塁打5%、ホームラン10%。
-得点は 0 / 0 / 1 / 2 / 3 / 5pt。
+データはこの端末のブラウザに保存されます。
 </p>
 
+<div class="actions">
 
 <button
 id="resetToday"
 class="btn secondary"
 >
-本日の挑戦履歴だけリセット
+本日の打席状況をリセット
 </button>
 
+<button
+id="resetScores"
+class="btn secondary"
+>
+得点をリセット
+</button>
 
 <button
 id="resetAll"
 class="btn primary"
 >
-全データ初期化
+全データをリセット
 </button>
-
 
 </div>
 
+<hr>
+
+<h3>
+打席履歴
+</h3>
+
+<div id="history"></div>
+
+</div>
 
 </section>
 
@@ -958,634 +911,719 @@ class="btn primary"
 </main>
 
 
-
 <script>
 
+/* =========================
+   データ
+========================= */
 
-const KEY=
-'nijigakuBaseballV1';
+const STORAGE_KEY=
+'nijigaku-baseball-v2';
 
 
 const placeholder=
-'assets/team-placeholder.png';
+'assets/baseball.png';
 
 
-
-const outcomes=[
-
-
-{
-name:'三振',
-p:20,
-pt:0,
-start:0,
-end:60,
-msg:[
-'空振り三振！バットが空を切った！',
-'最後の一球を捉えきれず、三振！'
-]
-},
-
-
-{
-name:'アウト',
-p:25,
-pt:0,
-start:60,
-end:120,
-msg:[
-'打球は守備の正面へ。アウト！',
-'惜しい当たりも、ここはアウト！'
-]
-},
-
-
-{
-name:'ヒット',
-p:25,
-pt:1,
-start:120,
-end:180,
-msg:[
-'鋭い打球が野手の間を抜けた！',
-'綺麗に運んだ一打、ヒット！'
-]
-},
-
-
-{
-name:'二塁打',
-p:15,
-pt:2,
-start:180,
-end:240,
-msg:[
-'打球は外野を抜け、一気に二塁へ！',
-'長打コース！悠々と二塁到達！'
-]
-},
-
-
-{
-name:'三塁打',
-p:5,
-pt:3,
-start:240,
-end:300,
-msg:[
-'快足を飛ばして三塁へ！三塁打！',
-'外野を深々と破る一打！三塁まで到達！'
-]
-},
-
-
-{
-name:'ホームラン',
-p:10,
-pt:5,
-start:300,
-end:360,
-msg:[
-'綺麗な放物線を描いた打球は、そのままスタンドへ！',
-'高く舞い上がった打球はフェンスの向こうへ！'
-]
-}
-
-
-];
-
-
-
-let db=load();
-
-let lastResult=null;
-
-let currentRotation=0;
-
-
-
-function seed(){
-
-return{
-
-teams:[
-
-{
-id:crypto.randomUUID(),
-name:'TEAM A',
-logo:placeholder,
-score:0
-},
-
-{
-id:crypto.randomUUID(),
-name:'TEAM B',
-logo:placeholder,
-score:0
-},
-
-{
-id:crypto.randomUUID(),
-name:'TEAM C',
-logo:placeholder,
-score:0
-}
-
-],
-
-students:[],
-
-history:[]
-
+let db={
+  teams:[],
+  students:[],
+  history:[]
 };
 
-}
-
-
-
-function load(){
 
 try{
 
-return JSON.parse(
-localStorage.getItem(KEY)
-)||seed();
+  const saved=
+  localStorage.getItem(
+    STORAGE_KEY
+  );
 
-}catch{
+  if(saved){
 
-return seed();
+    db=
+    JSON.parse(saved);
 
-}
+  }
 
-}
+}catch(e){
 
-
-
-function save(){
-
-localStorage.setItem(
-KEY,
-JSON.stringify(db)
-);
-
-renderAll();
+  console.error(e);
 
 }
 
 
+db.teams=
+Array.isArray(db.teams)
+?
+db.teams
+:
+[];
 
-const today=()=>{
 
-return new Intl.DateTimeFormat(
+db.students=
+Array.isArray(db.students)
+?
+db.students
+:
+[];
 
-'sv-SE',
 
-{
-timeZone:'Asia/Tokyo'
-}
+db.history=
+Array.isArray(db.history)
+?
+db.history
+:
+[];
 
-).format(
-new Date()
-);
 
-};
 
-
-
-const team=id=>
-
-db.teams.find(
-t=>t.id===id
-);
-
-
-
-const played=s=>
-
-s.lastPlayed===today();
-
-
-
-function pick(){
-
-let n=
-Math.random()*100;
-
-let sum=0;
-
-
-for(const o of outcomes){
-
-sum+=o.p;
-
-if(n<sum){
-
-return o;
-
-}
-
-}
-
-
-return outcomes.at(-1);
-
-}
-
-
-
-function esc(s=''){
-
-return s.replace(
-
-/[&<>"']/g,
-
-m=>({
-
-'&':'&amp;',
-
-'<':'&lt;',
-
-'>':'&gt;',
-
-'"':'&quot;',
-
-"'":'&#39;'
-
-}[m])
-
-);
-
-}
-
-
-
-function rankHTML(index){
-
-const rank=index+1;
-
-
-if(rank===1){
-
-return '<span class="rank rank-1">1位</span>';
-
-}
-
-
-if(rank===2){
-
-return '<span class="rank rank-2">2位</span>';
-
-}
-
-
-if(rank===3){
-
-return '<span class="rank rank-3">3位</span>';
-
-}
-
-
-return `${rank}位`;
-
-}
-
-
-
-document
-.querySelectorAll('.tab')
-.forEach(
-
-b=>b.onclick=()=>{
-
-
-document
-.querySelectorAll('.tab,.page')
-.forEach(
-
-x=>x.classList.remove('active')
-
-);
-
-
-b.classList.add('active');
-
-
-document
-.getElementById(
-b.dataset.page
-)
-.classList.add('active');
-
-
-renderAll();
-
-}
-
-);
-
-
-
-function renderAll(){
-
+/* =========================
+   DOM
+========================= */
 
 const batter=
 document.getElementById('batter');
 
+const batterTeam=
+document.getElementById('batterTeam');
 
-const old=
-batter.value;
+const todayStatus=
+document.getElementById('todayStatus');
+
+const wheel=
+document.getElementById('wheel');
+
+const spin=
+document.getElementById('spin');
+
+const resultName=
+document.getElementById('resultName');
+
+const resultScore=
+document.getElementById('resultScore');
+
+const totals=
+document.getElementById('totals');
+
+const message=
+document.getElementById('message');
+
+const copy=
+document.getElementById('copy');
+
+const teamRanking=
+document.getElementById('teamRanking');
+
+const studentRanking=
+document.getElementById('studentRanking');
+
+const studentName=
+document.getElementById('studentName');
+
+const studentTeam=
+document.getElementById('studentTeam');
+
+const addStudent=
+document.getElementById('addStudent');
+
+const studentRows=
+document.getElementById('studentRows');
+
+const teamName=
+document.getElementById('teamName');
+
+const addTeam=
+document.getElementById('addTeam');
+
+const teamRows=
+document.getElementById('teamRows');
+
+const history=
+document.getElementById('history');
+
+const resetToday=
+document.getElementById('resetToday');
+
+const resetScores=
+document.getElementById('resetScores');
+
+const resetAll=
+document.getElementById('resetAll');
 
 
 
-batter.innerHTML=
+/* =========================
+   基本関数
+========================= */
 
-'<option value="">生徒を選択してください</option>'
+function esc(value){
 
-+
+  return String(value??'')
 
-db.students.map(
+  .replaceAll(
+    '&',
+    '&amp;'
+  )
 
-s=>
-`<option value="${s.id}">${esc(s.name)}</option>`
+  .replaceAll(
+    '<',
+    '&lt;'
+  )
 
-).join('');
+  .replaceAll(
+    '>',
+    '&gt;'
+  )
+
+  .replaceAll(
+    '"',
+    '&quot;'
+  )
+
+  .replaceAll(
+    "'",
+    '&#039;'
+  );
+
+}
 
 
+function today(){
 
-if(
+  const d=
+  new Date();
 
-db.students.some(
-s=>s.id===old
-)
+  const year=
+  d.getFullYear();
 
-){
+  const month=
+  String(
+    d.getMonth()+1
+  ).padStart(
+    2,
+    '0'
+  );
 
-batter.value=old;
+  const date=
+  String(
+    d.getDate()
+  ).padStart(
+    2,
+    '0'
+  );
+
+  return `${year}-${month}-${date}`;
+
+}
+
+
+function team(id){
+
+  return db.teams.find(
+    t=>t.id===id
+  );
+
+}
+
+
+function played(student){
+
+  return student.lastPlayed===
+  today();
+
+}
+
+
+function rankClass(index){
+
+  if(index===0){
+    return 'rank rank-1';
+  }
+
+  if(index===1){
+    return 'rank rank-2';
+  }
+
+  if(index===2){
+    return 'rank rank-3';
+  }
+
+  return '';
+
+}
+
+
+function save(){
+
+  localStorage.setItem(
+    STORAGE_KEY,
+    JSON.stringify(db)
+  );
+
+  render();
 
 }
 
 
 
-renderBatter();
-
-
-
-studentTeam.innerHTML=
-
-db.teams.map(
-
-t=>
-`<option value="${t.id}">${esc(t.name)}</option>`
-
-).join('');
-
-
-
-studentRows.innerHTML=
-
-db.students.map(
-
-s=>`
-
-<tr>
-
-<td>
-${esc(s.name)}
-</td>
-
-<td>
-${esc(
-team(s.teamId)?.name||
-'未所属'
-)}
-</td>
-
-<td>
-${s.score||0}pt
-</td>
-
-<td>
-${played(s)?'打席済み':'未打席'}
-</td>
-
-<td>
-
-<button
-onclick="delStudent('${s.id}')"
->
-削除
-</button>
-
-</td>
-
-</tr>
-
-`
-
-).join('');
-
-
-
-teamRows.innerHTML=
-
-db.teams.map(
-
-t=>`
-
-<div
-class="card"
-style="margin:10px 0"
->
-
-<div class="teamline">
-
-<img
-src="${t.logo||placeholder}"
->
-
-<input
-value="${esc(t.name)}"
-onchange="renameTeam('${t.id}',this.value)"
->
-
-<input
-type="file"
-accept="image/*"
-onchange="logoTeam('${t.id}',this.files[0])"
->
-
-<button
-onclick="delTeam('${t.id}')"
->
-削除
-</button>
-
-</div>
-
-</div>
-
-`
-
-).join('');
-
-
-
-let tr=
-[...db.teams]
-.sort(
-(a,b)=>b.score-a.score
-);
-
-
-
-teamRank.innerHTML=
-
-tr.map(
-
-(t,i)=>`
-
-<tr>
-
-<td>
-${rankHTML(i)}
-</td>
-
-<td>
-
-<span class="teamline">
-
-<img
-class="logo"
-src="${t.logo||placeholder}"
->
-
-${esc(t.name)}
-
-</span>
-
-</td>
-
-<td>
-${t.score||0}pt
-</td>
-
-</tr>
-
-`
-
-).join('');
-
-
-
-let pr=
-[...db.students]
-.sort(
-(a,b)=>b.score-a.score
-);
-
-
-
-playerRank.innerHTML=
-
-pr.map(
-
-(s,i)=>`
-
-<tr>
-
-<td>
-${rankHTML(i)}
-</td>
-
-<td>
-${esc(s.name)}
-</td>
-
-<td>
-${esc(
-team(s.teamId)?.name||
-'未所属'
-)}
-</td>
-
-<td>
-${s.score||0}pt
-</td>
-
-</tr>
-
-`
-
-).join('');
-
+/* =========================
+   タブ
+========================= */
+
+document
+.querySelectorAll('.tab')
+.forEach(button=>{
+
+  button.onclick=()=>{
+
+    document
+    .querySelectorAll('.tab')
+    .forEach(tab=>{
+
+      tab.classList.remove(
+        'active'
+      );
+
+    });
+
+
+    document
+    .querySelectorAll('.page')
+    .forEach(page=>{
+
+      page.classList.remove(
+        'active'
+      );
+
+    });
+
+
+    button.classList.add(
+      'active'
+    );
+
+
+    document
+    .getElementById(
+      button.dataset.page
+    )
+    .classList.add(
+      'active'
+    );
+
+  };
+
+});
+
+
+
+/* =========================
+   ルーレット結果
+========================= */
+
+const outcomes=[
+
+  {
+    name:'三振',
+    pt:0,
+    start:0,
+    end:60,
+    msg:[
+      '空振り三振！',
+      'バットは空を切った！',
+      '惜しくも三振！'
+    ]
+  },
+
+  {
+    name:'アウト',
+    pt:0,
+    start:60,
+    end:120,
+    msg:[
+      '打球は守備の正面！',
+      'アウト！',
+      '惜しくも塁には届かない！'
+    ]
+  },
+
+  {
+    name:'ヒット',
+    pt:1,
+    start:120,
+    end:180,
+    msg:[
+      '綺麗なヒット！',
+      '打球が抜けた！',
+      '見事な一打！'
+    ]
+  },
+
+  {
+    name:'二塁打',
+    pt:2,
+    start:180,
+    end:240,
+    msg:[
+      '一気に二塁へ！',
+      '長打が飛び出した！',
+      '見事なツーベース！'
+    ]
+  },
+
+  {
+    name:'三塁打',
+    pt:3,
+    start:240,
+    end:300,
+    msg:[
+      '一気に三塁へ！',
+      '快足を飛ばして三塁打！',
+      '見事なスリーベース！'
+    ]
+  },
+
+  {
+    name:'ホームラン',
+    pt:4,
+    start:300,
+    end:360,
+    msg:[
+      '打球はスタンドへ！',
+      '豪快なホームラン！',
+      '完璧な一発！'
+    ]
+  }
+
+];
+
+
+function pick(){
+
+  return outcomes[
+    Math.floor(
+      Math.random()*
+      outcomes.length
+    )
+  ];
 
 }
 
 
+
+/* =========================
+   描画
+========================= */
+
+function render(){
+
+  const selected=
+  batter.value;
+
+
+  batter.innerHTML=
+
+  '<option value="">生徒を選択してください</option>'
+
+  +
+
+  db.students.map(
+    s=>
+
+    `<option value="${s.id}">
+    ${esc(s.name)}
+    </option>`
+
+  ).join('');
+
+
+  if(
+    db.students.some(
+      s=>s.id===selected
+    )
+  ){
+
+    batter.value=
+    selected;
+
+  }
+
+
+  studentTeam.innerHTML=
+
+  '<option value="">未所属</option>'
+
+  +
+
+  db.teams.map(
+    t=>
+
+    `<option value="${t.id}">
+    ${esc(t.name)}
+    </option>`
+
+  ).join('');
+
+
+
+  studentRows.innerHTML=
+
+  db.students.map(
+    s=>
+
+    `<tr>
+
+    <td>
+    ${esc(s.name)}
+    </td>
+
+    <td>
+    ${esc(
+      team(s.teamId)?.name||
+      '未所属'
+    )}
+    </td>
+
+    <td>
+    ${s.score||0}pt
+    </td>
+
+    <td>
+    <button
+    class="delete"
+    onclick="delStudent('${s.id}')"
+    >
+    削除
+    </button>
+    </td>
+
+    </tr>`
+
+  ).join('');
+
+
+
+  teamRows.innerHTML=
+
+  db.teams.map(
+    t=>
+
+    `<div class="teamline">
+
+    <img
+    src="${t.logo||placeholder}"
+    alt=""
+    >
+
+    <input
+    type="text"
+    value="${esc(t.name)}"
+    onchange="renameTeam('${t.id}',this.value)"
+    >
+
+    <input
+    type="file"
+    accept="image/*"
+    onchange="teamLogo('${t.id}',this)"
+    >
+
+    <button
+    class="delete"
+    onclick="delTeam('${t.id}')"
+    >
+    削除
+    </button>
+
+    </div>
+
+    <hr>`
+
+  ).join('');
+
+
+
+  const sortedTeams=
+
+  [...db.teams].sort(
+    (a,b)=>
+    (b.score||0)-
+    (a.score||0)
+  );
+
+
+  teamRanking.innerHTML=
+
+  sortedTeams.map(
+    (t,index)=>
+
+    `<tr>
+
+    <td>
+    <span class="${rankClass(index)}">
+    ${index+1}位
+    </span>
+    </td>
+
+    <td>
+
+    <div class="teamline">
+
+    <img
+    src="${t.logo||placeholder}"
+    alt=""
+    >
+
+    ${esc(t.name)}
+
+    </div>
+
+    </td>
+
+    <td>
+    ${t.score||0}pt
+    </td>
+
+    </tr>`
+
+  ).join('');
+
+
+
+  const sortedStudents=
+
+  [...db.students].sort(
+    (a,b)=>
+    (b.score||0)-
+    (a.score||0)
+  );
+
+
+  studentRanking.innerHTML=
+
+  sortedStudents.map(
+    (s,index)=>
+
+    `<tr>
+
+    <td>
+    <span class="${rankClass(index)}">
+    ${index+1}位
+    </span>
+    </td>
+
+    <td>
+    ${esc(s.name)}
+    </td>
+
+    <td>
+    ${esc(
+      team(s.teamId)?.name||
+      '未所属'
+    )}
+    </td>
+
+    <td>
+    ${s.score||0}pt
+    </td>
+
+    </tr>`
+
+  ).join('');
+
+
+
+  history.innerHTML=
+
+  db.history.length
+
+  ?
+
+  db.history.map(
+    h=>
+
+    `<p>
+    <b>${esc(h.name)}</b>
+    　${esc(h.result)}
+    　<span class="small">${esc(h.time)}</span>
+    </p>`
+
+  ).join('')
+
+  :
+
+  '<p class="small">履歴はありません</p>';
+
+
+  renderBatter();
+
+}
+
+
+
+/* =========================
+   打者
+========================= */
 
 function renderBatter(){
 
+  const s=
 
-let s=
-
-db.students.find(
-
-x=>x.id===batter.value
-
-);
+  db.students.find(
+    x=>x.id===batter.value
+  );
 
 
+  if(!s){
 
-if(!s){
+    batterTeam.innerHTML=
+    '';
 
+    todayStatus.innerHTML=
+    '生徒を選択してください';
 
-batterTeam.innerHTML='';
+    spin.disabled=
+    true;
 
+    return;
 
-todayStatus.innerHTML=
-'生徒を選択してください';
-
-
-spin.disabled=true;
-
-
-return;
-
-}
+  }
 
 
-
-let t=
-team(s.teamId);
-
+  const t=
+  team(s.teamId);
 
 
-batterTeam.innerHTML=
+  batterTeam.innerHTML=
 
-`<img src="${t?.logo||placeholder}">${esc(t?.name||'未所属')}`;
+  `<img
+  src="${t?.logo||placeholder}"
+  alt=""
+  >
 
-
-
-todayStatus.innerHTML=
-
-played(s)
-
-?
-
-'<span class="warn">本日は打席済みです</span>'
-
-:
-
-'<span class="ok">本日はまだ打席に立っていません</span>';
+  ${esc(
+    t?.name||
+    '未所属'
+  )}`;
 
 
+  todayStatus.innerHTML=
 
-spin.disabled=
-played(s);
+  played(s)
 
+  ?
+
+  '<span class="warn">本日は打席済みです</span>'
+
+  :
+
+  '<span class="ok">本日はまだ打席に立っていません</span>';
+
+
+  spin.disabled=
+  played(s);
 
 }
-
 
 
 batter.onchange=
@@ -1593,154 +1631,146 @@ renderBatter;
 
 
 
+/* =========================
+   ルーレット
+========================= */
+
+let currentRotation=
+0;
+
+
 spin.onclick=()=>{
 
+  const s=
 
-let s=
+  db.students.find(
+    x=>x.id===batter.value
+  );
 
-db.students.find(
 
-x=>x.id===batter.value
+  if(
+    !s||
+    played(s)
+  ){
 
-);
+    return;
 
+  }
 
 
-if(
-!s||
-played(s)
-){
+  spin.disabled=
+  true;
 
-return;
 
-}
+  const o=
+  pick();
 
 
+  const targetAngle=
 
-spin.disabled=true;
+  o.start+
 
+  Math.random()*
+  (o.end-o.start);
 
 
-let o=
-pick();
+  const currentNormalized=
 
+  (
+    (
+      currentRotation%
+      360
+    )+
+    360
+  )%
+  360;
 
 
-const targetAngle=
+  const targetNormalized=
 
-o.start+
+  (
+    360-
+    targetAngle
+  )%
+  360;
 
-Math.random()*
-(o.end-o.start);
 
+  const extraRotation=
 
+  1440+
 
-const currentNormalized=
+  (
+    (
+      targetNormalized-
+      currentNormalized+
+      360
+    )%
+    360
+  );
 
-(
-(currentRotation%360)+360
-)%360;
 
+  currentRotation+=
+  extraRotation;
 
 
-const targetNormalized=
+  wheel.style.transform=
 
-(
-360-targetAngle
-)%360;
+  `rotate(${currentRotation}deg)`;
 
 
+  setTimeout(()=>{
 
-const extraRotation=
+    const t=
+    team(s.teamId);
 
-1440+
 
-(
-(
-targetNormalized
--currentNormalized
-+360
-)%360
-);
+    s.score=
+    (s.score||0)+
+    o.pt;
 
 
+    s.lastPlayed=
+    today();
 
-currentRotation+=
-extraRotation;
 
+    if(t){
 
+      t.score=
+      (t.score||0)+
+      o.pt;
 
-wheel.style.transform=
+    }
 
-`rotate(${currentRotation}deg)`;
 
+    db.history.unshift({
 
+      name:s.name,
 
-setTimeout(()=>{
+      result:o.name,
 
+      time:new Date()
+      .toLocaleTimeString(
+        'ja-JP',
+        {
+          hour:'2-digit',
+          minute:'2-digit'
+        }
+      )
 
-let t=
-team(s.teamId);
+    });
 
 
+    const msg=
 
-s.score=
-(s.score||0)+o.pt;
+    o.msg[
+      Math.floor(
+        Math.random()*
+        o.msg.length
+      )
+    ];
 
 
-
-s.lastPlayed=
-today();
-
-
-
-if(t){
-
-t.score=
-(t.score||0)+o.pt;
-
-}
-
-
-
-db.history.unshift({
-
-name:s.name,
-
-result:o.name,
-
-time:new Date()
-.toLocaleTimeString(
-
-'ja-JP',
-
-{
-hour:'2-digit',
-minute:'2-digit'
-}
-
-)
-
-});
-
-
-
-let msg=
-
-o.msg[
-
-Math.floor(
-
-Math.random()*
-o.msg.length
-
-)
-
-];
-
-
-
-lastResult=
+    const lastResult=
 
 `⚾ ${s.name}が打席に立ちました！
 ルーレットの結果は──
@@ -1752,378 +1782,421 @@ ${s.name}　＋${o.pt}P
 ${t?.name||'未所属'}　＋${o.pt}P`;
 
 
-
-resultName.textContent=
-
-o.name+'！';
+    resultName.textContent=
+    o.name+'！';
 
 
-
-resultScore.textContent=
-
-`＋${o.pt} pt`;
+    resultScore.textContent=
+    `＋${o.pt} pt`;
 
 
+    totals.textContent=
 
-totals.textContent=
-
-`個人累計：${s.score}pt ／ チーム累計：${t?.score||0}pt`;
-
+    `個人累計：${s.score}pt ／ チーム累計：${t?.score||0}pt`;
 
 
-message.value=
-lastResult;
+    message.value=
+    lastResult;
 
 
+    save();
 
-save();
-
-
-},2200);
-
+  },2200);
 
 };
 
 
+
+/* =========================
+   コピー
+========================= */
 
 copy.onclick=
 async()=>{
 
-
-await navigator.clipboard.writeText(
-message.value
-);
-
-
-copy.textContent=
-'コピーしました';
+  await navigator
+  .clipboard
+  .writeText(
+    message.value
+  );
 
 
-setTimeout(
+  copy.textContent=
+  'コピーしました';
 
-()=>copy.textContent=
-'結果をコピー',
 
-1200
+  setTimeout(
+    ()=>{
 
-);
+      copy.textContent=
+      '結果をコピー';
 
+    },
+    1200
+  );
 
 };
 
 
+
+/* =========================
+   生徒管理
+========================= */
 
 addStudent.onclick=()=>{
 
-
-let n=
-studentName.value.trim();
-
+  const n=
+  studentName.value.trim();
 
 
-if(!n){
+  if(!n){
 
-return alert(
-'生徒名を入力してください'
-);
+    return alert(
+      '生徒名を入力してください'
+    );
 
-}
-
-
-
-if(
-
-db.students.some(
-s=>s.name===n
-)
-
-){
-
-return alert(
-'同名の生徒が登録済みです'
-);
-
-}
+  }
 
 
+  if(
+    db.students.some(
+      s=>s.name===n
+    )
+  ){
 
-db.students.push({
+    return alert(
+      '同名の生徒が登録済みです'
+    );
 
-id:crypto.randomUUID(),
-
-name:n,
-
-teamId:studentTeam.value,
-
-score:0,
-
-lastPlayed:''
-
-});
+  }
 
 
+  db.students.push({
 
-studentName.value='';
+    id:crypto.randomUUID(),
+
+    name:n,
+
+    teamId:studentTeam.value,
+
+    score:0,
+
+    lastPlayed:''
+
+  });
 
 
+  studentName.value=
+  '';
 
-save();
 
+  save();
 
 };
-
 
 
 window.delStudent=id=>{
 
+  if(
+    confirm(
+      'この生徒を削除しますか？'
+    )
+  ){
 
-if(
+    db.students=
 
-confirm(
-'この生徒を削除しますか？'
-)
-
-){
-
-
-db.students=
-
-db.students.filter(
-
-s=>s.id!==id
-
-);
+    db.students.filter(
+      s=>s.id!==id
+    );
 
 
+    save();
 
-save();
-
-
-}
-
+  }
 
 };
 
 
+
+/* =========================
+   チーム管理
+========================= */
 
 addTeam.onclick=()=>{
 
-
-let n=
-teamName.value.trim();
-
+  const n=
+  teamName.value.trim();
 
 
-if(!n){
+  if(!n){
 
-return alert(
-'チーム名を入力してください'
-);
+    return alert(
+      'チーム名を入力してください'
+    );
 
-}
-
-
-
-db.teams.push({
-
-id:crypto.randomUUID(),
-
-name:n,
-
-logo:placeholder,
-
-score:0
-
-});
+  }
 
 
+  db.teams.push({
 
-teamName.value='';
+    id:crypto.randomUUID(),
+
+    name:n,
+
+    logo:placeholder,
+
+    score:0
+
+  });
 
 
+  teamName.value=
+  '';
 
-save();
 
+  save();
 
 };
 
 
+window.renameTeam=(id,value)=>{
 
-window.renameTeam=
-(id,n)=>{
-
-
-let t=
-team(id);
+  const t=
+  team(id);
 
 
+  if(!t){
 
-if(t){
+    return;
 
-t.name=
-n.trim()||t.name;
-
-
-save();
-
-}
+  }
 
 
-};
+  t.name=
+  value.trim()||
+  '名称未設定';
 
 
-
-window.logoTeam=
-(id,file)=>{
-
-
-if(!file){
-
-return;
-
-}
-
-
-
-let r=
-new FileReader();
-
-
-
-r.onload=()=>{
-
-
-team(id).logo=
-r.result;
-
-
-save();
-
+  save();
 
 };
 
 
+window.teamLogo=(id,input)=>{
 
-r.readAsDataURL(
-file
-);
+  const file=
+  input.files?.[0];
 
+
+  if(!file){
+
+    return;
+
+  }
+
+
+  const reader=
+  new FileReader();
+
+
+  reader.onload=()=>{
+
+    const t=
+    team(id);
+
+
+    if(!t){
+
+      return;
+
+    }
+
+
+    t.logo=
+    reader.result;
+
+
+    save();
+
+  };
+
+
+  reader.readAsDataURL(
+    file
+  );
 
 };
-
 
 
 window.delTeam=id=>{
 
+  if(
+    !confirm(
+      'このチームを削除しますか？'
+    )
+  ){
 
-if(
+    return;
 
-db.students.some(
-s=>s.teamId===id
-)
-
-){
-
-return alert(
-'所属生徒がいるため削除できません'
-);
-
-}
+  }
 
 
+  db.teams=
 
-if(
-
-confirm(
-'このチームを削除しますか？'
-)
-
-){
+  db.teams.filter(
+    t=>t.id!==id
+  );
 
 
-db.teams=
+  db.students.forEach(
+    s=>{
 
-db.teams.filter(
+      if(
+        s.teamId===id
+      ){
 
-t=>t.id!==id
+        s.teamId=
+        '';
 
-);
+      }
+
+    }
+  );
 
 
-
-save();
-
-
-}
-
+  save();
 
 };
 
 
+
+/* =========================
+   設定
+========================= */
 
 resetToday.onclick=()=>{
 
+  if(
+    !confirm(
+      '本日の打席状況をリセットしますか？'
+    )
+  ){
 
-if(
+    return;
 
-confirm(
-'本日の挑戦履歴をリセットしますか？'
-)
-
-){
-
-
-db.students.forEach(
-
-s=>s.lastPlayed=''
-
-);
+  }
 
 
+  db.students.forEach(
+    s=>{
 
-save();
+      s.lastPlayed=
+      '';
+
+    }
+  );
 
 
-}
-
+  save();
 
 };
 
+
+resetScores.onclick=()=>{
+
+  if(
+    !confirm(
+      '全ての得点を0に戻しますか？'
+    )
+  ){
+
+    return;
+
+  }
+
+
+  db.students.forEach(
+    s=>{
+
+      s.score=
+      0;
+
+    }
+  );
+
+
+  db.teams.forEach(
+    t=>{
+
+      t.score=
+      0;
+
+    }
+  );
+
+
+  db.history=
+  [];
+
+
+  save();
+
+};
 
 
 resetAll.onclick=()=>{
 
+  if(
+    !confirm(
+      '全データを削除しますか？'
+    )
+  ){
 
-if(
+    return;
 
-confirm(
-'全データを初期化します。元に戻せません。'
-)
-
-){
-
-
-db=
-seed();
+  }
 
 
+  if(
+    !confirm(
+      '本当に削除しますか？この操作は戻せません。'
+    )
+  ){
 
-save();
+    return;
+
+  }
 
 
-}
+  db={
 
+    teams:[],
+
+    students:[],
+
+    history:[]
+
+  };
+
+
+  localStorage.removeItem(
+    STORAGE_KEY
+  );
+
+
+  render();
 
 };
 
 
 
-renderAll();
+/* =========================
+   初期描画
+========================= */
 
+render();
 
 </script>
 
-
 </body>
-
 </html>

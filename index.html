@@ -159,12 +159,12 @@ textarea{
   border-radius:50%;
 
   background:conic-gradient(
-    #c42f32 0deg 72deg,
-    #3c4147 72deg 162deg,
-    #595959 162deg 252deg,
-    #3d8d56 252deg 306deg,
-    #3165ad 306deg 324deg,
-    #e89b2f 324deg 360deg
+    #c42f32 0deg 60deg,
+    #3c4147 60deg 120deg,
+    #595959 120deg 180deg,
+    #3d8d56 180deg 240deg,
+    #3165ad 240deg 300deg,
+    #e89b2f 300deg 360deg
   );
 
   border:8px solid #fff;
@@ -196,33 +196,33 @@ textarea{
 }
 
 .label-1{
-  left:68.8%;
-  top:24.1%;
+  left:70%;
+  top:30%;
 }
 
 .label-2{
-  left:78.5%;
-  top:64.5%;
+  left:80%;
+  top:50%;
 }
 
 .label-3{
-  left:35.5%;
-  top:78.5%;
+  left:70%;
+  top:70%;
 }
 
 .label-4{
-  left:18.4%;
-  top:45%;
+  left:30%;
+  top:70%;
 }
 
 .label-5{
-  left:27.4%;
-  top:27.4%;
+  left:20%;
+  top:50%;
 }
 
 .label-6{
-  left:40.1%;
-  top:19.6%;
+  left:30%;
+  top:30%;
 }
 
 .wheel img{
@@ -463,13 +463,11 @@ th{
 <table>
 
 <thead>
-
 <tr>
 <th>順位</th>
 <th>チーム</th>
 <th>得点</th>
 </tr>
-
 </thead>
 
 <tbody id="teamRank"></tbody>
@@ -486,14 +484,12 @@ th{
 <table>
 
 <thead>
-
 <tr>
 <th>順位</th>
 <th>名前</th>
 <th>所属</th>
 <th>得点</th>
 </tr>
-
 </thead>
 
 <tbody id="playerRank"></tbody>
@@ -534,7 +530,6 @@ style="flex:1;min-width:180px"
 <table>
 
 <thead>
-
 <tr>
 <th>名前</th>
 <th>所属</th>
@@ -542,7 +537,6 @@ style="flex:1;min-width:180px"
 <th>今日</th>
 <th></th>
 </tr>
-
 </thead>
 
 <tbody id="studentRows"></tbody>
@@ -618,79 +612,72 @@ const placeholder='assets/team-placeholder.png';
 
 
 const outcomes=[
-
 {
-name:'三振',
-p:20,
-pt:0,
-start:0,
-end:72,
-msg:[
-'空振り三振！バットが空を切った！',
-'最後の一球を捉えきれず、三振！'
-]
+  name:'三振',
+  p:20,
+  pt:0,
+  start:0,
+  end:60,
+  msg:[
+    '空振り三振！バットが空を切った！',
+    '最後の一球を捉えきれず、三振！'
+  ]
 },
-
 {
-name:'アウト',
-p:25,
-pt:0,
-start:72,
-end:162,
-msg:[
-'打球は守備の正面へ。アウト！',
-'惜しい当たりも、ここはアウト！'
-]
+  name:'アウト',
+  p:25,
+  pt:0,
+  start:60,
+  end:120,
+  msg:[
+    '打球は守備の正面へ。アウト！',
+    '惜しい当たりも、ここはアウト！'
+  ]
 },
-
 {
-name:'ヒット',
-p:25,
-pt:1,
-start:162,
-end:252,
-msg:[
-'鋭い打球が野手の間を抜けた！',
-'綺麗に運んだ一打、ヒット！'
-]
+  name:'ヒット',
+  p:25,
+  pt:1,
+  start:120,
+  end:180,
+  msg:[
+    '鋭い打球が野手の間を抜けた！',
+    '綺麗に運んだ一打、ヒット！'
+  ]
 },
-
 {
-name:'二塁打',
-p:15,
-pt:2,
-start:252,
-end:306,
-msg:[
-'打球は外野を抜け、一気に二塁へ！',
-'長打コース！悠々と二塁到達！'
-]
+  name:'二塁打',
+  p:15,
+  pt:2,
+  start:180,
+  end:240,
+  msg:[
+    '打球は外野を抜け、一気に二塁へ！',
+    '長打コース！悠々と二塁到達！'
+  ]
 },
-
 {
-name:'三塁打',
-p:5,
-pt:3,
-start:306,
-end:324,
-msg:[
-'快足を飛ばして三塁へ！三塁打！',
-'外野を深々と破る一打！三塁まで到達！'
-]
+  name:'三塁打',
+  p:5,
+  pt:3,
+  start:240,
+  end:300,
+  msg:[
+    '快足を飛ばして三塁へ！三塁打！',
+    '外野を深々と破る一打！三塁まで到達！'
+  ]
 },
-
 {
-name:'ホームラン',
-p:10,
-pt:5,
-start:324,
-end:360,
-msg:[
-'綺麗な放物線を描いた打球は、そのままスタンドへ！',
-'高く舞い上がった打球はフェンスの向こうへ！'
-]
+  name:'ホームラン',
+  p:10,
+  pt:5,
+  start:300,
+  end:360,
+  msg:[
+    '綺麗な放物線を描いた打球は、そのままスタンドへ！',
+    '高く舞い上がった打球はフェンスの向こうへ！'
+  ]
 }
-
 ];
 
 
@@ -702,36 +689,28 @@ let currentRotation=0;
 function seed(){
 
 return {
-
 teams:[
-
 {
 id:crypto.randomUUID(),
 name:'TEAM A',
 logo:placeholder,
 score:0
 },
-
 {
 id:crypto.randomUUID(),
 name:'TEAM B',
 logo:placeholder,
 score:0
 },
-
 {
 id:crypto.randomUUID(),
 name:'TEAM C',
 logo:placeholder,
 score:0
 }
-
 ],
-
 students:[],
-
 history:[]
-
 };
 
 }
@@ -799,23 +778,14 @@ return outcomes.at(-1);
 function esc(s=''){
 
 return s.replace(
-
 /[&<>"']/g,
-
 m=>({
-
 '&':'&amp;',
-
 '<':'&lt;',
-
 '>':'&gt;',
-
 '"':'&quot;',
-
 "'":'&#39;'
-
 }[m])
-
 );
 
 }
@@ -826,9 +796,7 @@ document.querySelectorAll('.tab').forEach(
 b=>b.onclick=()=>{
 
 document.querySelectorAll('.tab,.page').forEach(
-
 x=>x.classList.remove('active')
-
 );
 
 b.classList.add('active');
@@ -852,15 +820,10 @@ const old=batter.value;
 
 
 batter.innerHTML=
-
 '<option value="">生徒を選択してください</option>'
-
 +
-
 db.students.map(
-
 s=>`<option value="${s.id}">${esc(s.name)}</option>`
-
 ).join('');
 
 
@@ -875,53 +838,33 @@ renderBatter();
 
 
 studentTeam.innerHTML=
-
 db.teams.map(
-
 t=>`<option value="${t.id}">${esc(t.name)}</option>`
-
 ).join('');
 
 
 studentRows.innerHTML=
-
 db.students.map(
-
 s=>`
-
 <tr>
-
 <td>${esc(s.name)}</td>
-
 <td>${esc(team(s.teamId)?.name||'未所属')}</td>
-
 <td>${s.score||0}pt</td>
-
 <td>${played(s)?'打席済み':'未打席'}</td>
-
 <td>
-
 <button onclick="delStudent('${s.id}')">
 削除
 </button>
-
 </td>
-
 </tr>
-
 `
-
 ).join('');
 
 
 teamRows.innerHTML=
-
 db.teams.map(
-
 t=>`
-
 <div class="card" style="margin:10px 0">
-
 <div class="teamline">
 
 <img src="${t.logo||placeholder}">
@@ -942,82 +885,51 @@ onchange="logoTeam('${t.id}',this.files[0])"
 </button>
 
 </div>
-
 </div>
-
 `
-
 ).join('');
 
 
 let tr=[...db.teams].sort(
-
 (a,b)=>b.score-a.score
-
 );
 
 
 teamRank.innerHTML=
-
 tr.map(
-
 (t,i)=>`
-
 <tr>
-
 <td>${i+1}</td>
-
 <td>
-
 <span class="teamline">
-
 <img
 class="logo"
 src="${t.logo||placeholder}"
 >
-
 ${esc(t.name)}
-
 </span>
-
 </td>
-
 <td>${t.score}pt</td>
-
 </tr>
-
 `
-
 ).join('');
 
 
 let pr=[...db.students].sort(
-
 (a,b)=>b.score-a.score
-
 );
 
 
 playerRank.innerHTML=
-
 pr.map(
-
 (s,i)=>`
-
 <tr>
-
 <td>${i+1}</td>
-
 <td>${esc(s.name)}</td>
-
 <td>${esc(team(s.teamId)?.name||'未所属')}</td>
-
 <td>${s.score||0}pt</td>
-
 </tr>
-
 `
-
 ).join('');
 
 }
@@ -1026,9 +938,7 @@ pr.map(
 function renderBatter(){
 
 let s=db.students.find(
-
 x=>x.id===batter.value
-
 );
 
 
@@ -1049,20 +959,14 @@ let t=team(s.teamId);
 
 
 batterTeam.innerHTML=
-
 `<img src="${t?.logo||placeholder}">${esc(t?.name||'未所属')}`;
 
 
 todayStatus.innerHTML=
-
 played(s)
-
 ?
-
 '<span class="warn">本日は打席済みです</span>'
-
 :
-
 '<span class="ok">本日はまだ打席に立っていません</span>';
 
 
@@ -1077,9 +981,7 @@ batter.onchange=renderBatter;
 spin.onclick=()=>{
 
 let s=db.students.find(
-
 x=>x.id===batter.value
-
 );
 
 
@@ -1125,7 +1027,6 @@ wheel.style.transform=
 
 setTimeout(()=>{
 
-
 let t=team(s.teamId);
 
 
@@ -1149,37 +1050,25 @@ name:s.name,
 result:o.name,
 
 time:new Date().toLocaleTimeString(
-
 'ja-JP',
-
 {
-
 hour:'2-digit',
-
 minute:'2-digit'
-
 }
-
 )
 
 });
 
 
 let msg=
-
 o.msg[
-
 Math.floor(
-
 Math.random()*o.msg.length
-
 )
-
 ];
 
 
 lastResult=
-
 `⚾ ${s.name}が打席に立ちました！
 ルーレットの結果は──
 
@@ -1191,17 +1080,14 @@ ${t?.name||'未所属'}　＋${o.pt}P`;
 
 
 resultName.textContent=
-
 o.name+'！';
 
 
 resultScore.textContent=
-
 `＋${o.pt} pt`;
 
 
 totals.textContent=
-
 `個人累計：${s.score}pt ／ チーム累計：${t?.score||0}pt`;
 
 
@@ -1219,9 +1105,7 @@ save();
 copy.onclick=async()=>{
 
 await navigator.clipboard.writeText(
-
 message.value
-
 );
 
 
@@ -1229,11 +1113,8 @@ copy.textContent='コピーしました';
 
 
 setTimeout(
-
 ()=>copy.textContent='結果をコピー',
-
 1200
-
 );
 
 };
@@ -1286,11 +1167,8 @@ window.delStudent=id=>{
 if(confirm('この生徒を削除しますか？')){
 
 db.students=
-
 db.students.filter(
-
 s=>s.id!==id
-
 );
 
 
@@ -1384,11 +1262,8 @@ return alert('所属生徒がいるため削除できません');
 if(confirm('このチームを削除しますか？')){
 
 db.teams=
-
 db.teams.filter(
-
 t=>t.id!==id
-
 );
 
 
@@ -1404,9 +1279,7 @@ resetToday.onclick=()=>{
 if(confirm('本日の挑戦履歴をリセットしますか？')){
 
 db.students.forEach(
-
 s=>s.lastPlayed=''
-
 );
 
 
@@ -1422,7 +1295,6 @@ resetAll.onclick=()=>{
 if(confirm('全データを初期化します。元に戻せません。')){
 
 db=seed();
-
 
 save();
 

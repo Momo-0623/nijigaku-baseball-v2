@@ -167,7 +167,6 @@ textarea{
 .wheel-disc{
   position:absolute;
   inset:0;
-
   border-radius:50%;
 
   background:conic-gradient(
@@ -193,18 +192,14 @@ textarea{
 
 
 /* =========================
-   固定文字
+   回転文字
 ========================= */
-
-.wheel-labels{
-  position:absolute;
-  inset:0;
-  z-index:2;
-  pointer-events:none;
-}
 
 .wheel-label{
   position:absolute;
+
+  left:50%;
+  top:50%;
 
   color:#fff;
 
@@ -217,40 +212,63 @@ textarea{
   text-shadow:
     0 2px 4px #000a;
 
-  transform:translate(-50%,-50%);
+  transform-origin:center;
 }
 
 
-/* 各マスの中央 */
+/*
+各文字はマス中央30度地点。
+
+円盤の中心から約34%の位置。
+*/
 
 .label-1{
-  left:72%;
-  top:25%;
+  transform:
+    translate(-50%,-50%)
+    rotate(30deg)
+    translateY(-34%)
+    translateY(-105px)
+    rotate(-30deg);
 }
 
 .label-2{
-  left:78%;
-  top:50%;
+  transform:
+    translate(-50%,-50%)
+    rotate(90deg)
+    translateY(-105px)
+    rotate(-90deg);
 }
 
 .label-3{
-  left:72%;
-  top:75%;
+  transform:
+    translate(-50%,-50%)
+    rotate(150deg)
+    translateY(-105px)
+    rotate(-150deg);
 }
 
 .label-4{
-  left:28%;
-  top:75%;
+  transform:
+    translate(-50%,-50%)
+    rotate(210deg)
+    translateY(-105px)
+    rotate(-210deg);
 }
 
 .label-5{
-  left:22%;
-  top:50%;
+  transform:
+    translate(-50%,-50%)
+    rotate(270deg)
+    translateY(-105px)
+    rotate(-270deg);
 }
 
 .label-6{
-  left:28%;
-  top:25%;
+  transform:
+    translate(-50%,-50%)
+    rotate(330deg)
+    translateY(-105px)
+    rotate(-330deg);
 }
 
 
@@ -424,6 +442,54 @@ hr{
     font-size:14px;
   }
 
+  .label-1{
+    transform:
+      translate(-50%,-50%)
+      rotate(30deg)
+      translateY(-96px)
+      rotate(-30deg);
+  }
+
+  .label-2{
+    transform:
+      translate(-50%,-50%)
+      rotate(90deg)
+      translateY(-96px)
+      rotate(-90deg);
+  }
+
+  .label-3{
+    transform:
+      translate(-50%,-50%)
+      rotate(150deg)
+      translateY(-96px)
+      rotate(-150deg);
+  }
+
+  .label-4{
+    transform:
+      translate(-50%,-50%)
+      rotate(210deg)
+      translateY(-96px)
+      rotate(-210deg);
+  }
+
+  .label-5{
+    transform:
+      translate(-50%,-50%)
+      rotate(270deg)
+      translateY(-96px)
+      rotate(-270deg);
+  }
+
+  .label-6{
+    transform:
+      translate(-50%,-50%)
+      rotate(330deg)
+      translateY(-96px)
+      rotate(-330deg);
+  }
+
   header b{
     font-size:17px;
   }
@@ -463,6 +529,7 @@ hr{
     width:100%;
   }
 }
+
 </style>
 </head>
 
@@ -486,38 +553,23 @@ alt=""
 
 <nav>
 
-<button
-class="tab active"
-data-page="bat"
->
+<button class="tab active" data-page="bat">
 打席
 </button>
 
-<button
-class="tab"
-data-page="rank"
->
+<button class="tab" data-page="rank">
 ランキング
 </button>
 
-<button
-class="tab"
-data-page="students"
->
+<button class="tab" data-page="students">
 生徒管理
 </button>
 
-<button
-class="tab"
-data-page="teams"
->
+<button class="tab" data-page="teams">
 チーム管理
 </button>
 
-<button
-class="tab"
-data-page="settings"
->
+<button class="tab" data-page="settings">
 設定
 </button>
 
@@ -527,23 +579,16 @@ data-page="settings"
 <main>
 
 
-<!-- =========================
-     打席
-========================= -->
+<!-- 打席 -->
 
-<section
-id="bat"
-class="page active"
->
+<section id="bat" class="page active">
 
 <div class="grid">
 
 
 <div class="card">
 
-<h3>
-打者を選択
-</h3>
+<h3>打者を選択</h3>
 
 <select id="batter"></select>
 
@@ -554,9 +599,7 @@ class="teamline"
 
 <hr>
 
-<h3>
-本日の打席状況
-</h3>
+<h3>本日の打席状況</h3>
 
 <div id="todayStatus"></div>
 
@@ -577,10 +620,7 @@ class="teamline"
 <div
 id="wheel"
 class="wheel-disc"
-></div>
-
-
-<div class="wheel-labels">
+>
 
 <span class="wheel-label label-1">
 三振
@@ -632,9 +672,7 @@ style="margin-top:14px"
 
 <div class="card result">
 
-<h2>
-結果
-</h2>
+<h2>結果</h2>
 
 <strong id="resultName">
 —
@@ -668,20 +706,13 @@ class="btn secondary"
 
 
 
-<!-- =========================
-     ランキング
-========================= -->
+<!-- ランキング -->
 
-<section
-id="rank"
-class="page"
->
+<section id="rank" class="page">
 
 <div class="card">
 
-<h2>
-チームランキング
-</h2>
+<h2>チームランキング</h2>
 
 <div class="table-wrap">
 
@@ -711,9 +742,7 @@ class="page"
 
 <div class="card">
 
-<h2>
-個人ランキング
-</h2>
+<h2>個人ランキング</h2>
 
 <div class="table-wrap">
 
@@ -742,24 +771,15 @@ class="page"
 
 
 
-<!-- =========================
-     生徒管理
-========================= -->
+<!-- 生徒管理 -->
 
-<section
-id="students"
-class="page"
->
+<section id="students" class="page">
 
 <div class="card">
 
-<h2>
-生徒管理
-</h2>
+<h2>生徒管理</h2>
 
-<label>
-生徒名
-</label>
+<label>生徒名</label>
 
 <input
 id="studentName"
@@ -767,9 +787,7 @@ type="text"
 placeholder="生徒名"
 >
 
-<label>
-所属チーム
-</label>
+<label>所属チーム</label>
 
 <select id="studentTeam"></select>
 
@@ -809,24 +827,15 @@ class="btn primary"
 
 
 
-<!-- =========================
-     チーム管理
-========================= -->
+<!-- チーム管理 -->
 
-<section
-id="teams"
-class="page"
->
+<section id="teams" class="page">
 
 <div class="card">
 
-<h2>
-チーム管理
-</h2>
+<h2>チーム管理</h2>
 
-<label>
-チーム名
-</label>
+<label>チーム名</label>
 
 <input
 id="teamName"
@@ -851,20 +860,13 @@ class="btn primary"
 
 
 
-<!-- =========================
-     設定
-========================= -->
+<!-- 設定 -->
 
-<section
-id="settings"
-class="page"
->
+<section id="settings" class="page">
 
 <div class="card">
 
-<h2>
-設定
-</h2>
+<h2>設定</h2>
 
 <p class="small">
 データはこの端末のブラウザに保存されます。
@@ -897,9 +899,7 @@ class="btn primary"
 
 <hr>
 
-<h3>
-打席履歴
-</h3>
+<h3>打席履歴</h3>
 
 <div id="history"></div>
 
@@ -920,17 +920,14 @@ class="btn primary"
 const STORAGE_KEY=
 'nijigaku-baseball-v2';
 
-
 const placeholder=
 'assets/baseball.png';
-
 
 let db={
   teams:[],
   students:[],
   history:[]
 };
-
 
 try{
 
@@ -940,18 +937,12 @@ try{
   );
 
   if(saved){
-
-    db=
-    JSON.parse(saved);
-
+    db=JSON.parse(saved);
   }
 
 }catch(e){
-
   console.error(e);
-
 }
-
 
 db.teams=
 Array.isArray(db.teams)
@@ -960,14 +951,12 @@ db.teams
 :
 [];
 
-
 db.students=
 Array.isArray(db.students)
 ?
 db.students
 :
 [];
-
 
 db.history=
 Array.isArray(db.history)
@@ -977,80 +966,40 @@ db.history
 [];
 
 
-
 /* =========================
    DOM
 ========================= */
 
-const batter=
-document.getElementById('batter');
+const batter=document.getElementById('batter');
+const batterTeam=document.getElementById('batterTeam');
+const todayStatus=document.getElementById('todayStatus');
 
-const batterTeam=
-document.getElementById('batterTeam');
+const wheel=document.getElementById('wheel');
+const spin=document.getElementById('spin');
 
-const todayStatus=
-document.getElementById('todayStatus');
+const resultName=document.getElementById('resultName');
+const resultScore=document.getElementById('resultScore');
+const totals=document.getElementById('totals');
+const message=document.getElementById('message');
+const copy=document.getElementById('copy');
 
-const wheel=
-document.getElementById('wheel');
+const teamRanking=document.getElementById('teamRanking');
+const studentRanking=document.getElementById('studentRanking');
 
-const spin=
-document.getElementById('spin');
+const studentName=document.getElementById('studentName');
+const studentTeam=document.getElementById('studentTeam');
+const addStudent=document.getElementById('addStudent');
+const studentRows=document.getElementById('studentRows');
 
-const resultName=
-document.getElementById('resultName');
+const teamName=document.getElementById('teamName');
+const addTeam=document.getElementById('addTeam');
+const teamRows=document.getElementById('teamRows');
 
-const resultScore=
-document.getElementById('resultScore');
+const history=document.getElementById('history');
 
-const totals=
-document.getElementById('totals');
-
-const message=
-document.getElementById('message');
-
-const copy=
-document.getElementById('copy');
-
-const teamRanking=
-document.getElementById('teamRanking');
-
-const studentRanking=
-document.getElementById('studentRanking');
-
-const studentName=
-document.getElementById('studentName');
-
-const studentTeam=
-document.getElementById('studentTeam');
-
-const addStudent=
-document.getElementById('addStudent');
-
-const studentRows=
-document.getElementById('studentRows');
-
-const teamName=
-document.getElementById('teamName');
-
-const addTeam=
-document.getElementById('addTeam');
-
-const teamRows=
-document.getElementById('teamRows');
-
-const history=
-document.getElementById('history');
-
-const resetToday=
-document.getElementById('resetToday');
-
-const resetScores=
-document.getElementById('resetScores');
-
-const resetAll=
-document.getElementById('resetAll');
-
+const resetToday=document.getElementById('resetToday');
+const resetScores=document.getElementById('resetScores');
+const resetAll=document.getElementById('resetAll');
 
 
 /* =========================
@@ -1060,58 +1009,30 @@ document.getElementById('resetAll');
 function esc(value){
 
   return String(value??'')
-
-  .replaceAll(
-    '&',
-    '&amp;'
-  )
-
-  .replaceAll(
-    '<',
-    '&lt;'
-  )
-
-  .replaceAll(
-    '>',
-    '&gt;'
-  )
-
-  .replaceAll(
-    '"',
-    '&quot;'
-  )
-
-  .replaceAll(
-    "'",
-    '&#039;'
-  );
+  .replaceAll('&','&amp;')
+  .replaceAll('<','&lt;')
+  .replaceAll('>','&gt;')
+  .replaceAll('"','&quot;')
+  .replaceAll("'",'&#039;');
 
 }
 
 
 function today(){
 
-  const d=
-  new Date();
+  const d=new Date();
 
-  const year=
-  d.getFullYear();
+  const year=d.getFullYear();
 
   const month=
   String(
     d.getMonth()+1
-  ).padStart(
-    2,
-    '0'
-  );
+  ).padStart(2,'0');
 
   const date=
   String(
     d.getDate()
-  ).padStart(
-    2,
-    '0'
-  );
+  ).padStart(2,'0');
 
   return `${year}-${month}-${date}`;
 
@@ -1166,7 +1087,6 @@ function save(){
 }
 
 
-
 /* =========================
    タブ
 ========================= */
@@ -1180,42 +1100,26 @@ document
     document
     .querySelectorAll('.tab')
     .forEach(tab=>{
-
-      tab.classList.remove(
-        'active'
-      );
-
+      tab.classList.remove('active');
     });
-
 
     document
     .querySelectorAll('.page')
     .forEach(page=>{
-
-      page.classList.remove(
-        'active'
-      );
-
+      page.classList.remove('active');
     });
 
-
-    button.classList.add(
-      'active'
-    );
-
+    button.classList.add('active');
 
     document
     .getElementById(
       button.dataset.page
     )
-    .classList.add(
-      'active'
-    );
+    .classList.add('active');
 
   };
 
 });
-
 
 
 /* =========================
@@ -1227,8 +1131,7 @@ const outcomes=[
   {
     name:'三振',
     pt:0,
-    start:0,
-    end:60,
+    center:30,
     msg:[
       '空振り三振！',
       'バットは空を切った！',
@@ -1239,8 +1142,7 @@ const outcomes=[
   {
     name:'アウト',
     pt:0,
-    start:60,
-    end:120,
+    center:90,
     msg:[
       '打球は守備の正面！',
       'アウト！',
@@ -1251,8 +1153,7 @@ const outcomes=[
   {
     name:'ヒット',
     pt:1,
-    start:120,
-    end:180,
+    center:150,
     msg:[
       '綺麗なヒット！',
       '打球が抜けた！',
@@ -1263,8 +1164,7 @@ const outcomes=[
   {
     name:'二塁打',
     pt:2,
-    start:180,
-    end:240,
+    center:210,
     msg:[
       '一気に二塁へ！',
       '長打が飛び出した！',
@@ -1275,8 +1175,7 @@ const outcomes=[
   {
     name:'三塁打',
     pt:3,
-    start:240,
-    end:300,
+    center:270,
     msg:[
       '一気に三塁へ！',
       '快足を飛ばして三塁打！',
@@ -1287,8 +1186,7 @@ const outcomes=[
   {
     name:'ホームラン',
     pt:4,
-    start:300,
-    end:360,
+    center:330,
     msg:[
       '打球はスタンドへ！',
       '豪快なホームラン！',
@@ -1311,7 +1209,6 @@ function pick(){
 }
 
 
-
 /* =========================
    描画
 ========================= */
@@ -1321,57 +1218,39 @@ function render(){
   const selected=
   batter.value;
 
-
   batter.innerHTML=
-
   '<option value="">生徒を選択してください</option>'
-
   +
-
   db.students.map(
     s=>
-
     `<option value="${s.id}">
     ${esc(s.name)}
     </option>`
-
   ).join('');
-
 
   if(
     db.students.some(
       s=>s.id===selected
     )
   ){
-
-    batter.value=
-    selected;
-
+    batter.value=selected;
   }
 
 
   studentTeam.innerHTML=
-
   '<option value="">未所属</option>'
-
   +
-
   db.teams.map(
     t=>
-
     `<option value="${t.id}">
     ${esc(t.name)}
     </option>`
-
   ).join('');
 
 
-
   studentRows.innerHTML=
-
   db.students.map(
     s=>
-
     `<tr>
 
     <td>
@@ -1399,16 +1278,12 @@ function render(){
     </td>
 
     </tr>`
-
   ).join('');
 
 
-
   teamRows.innerHTML=
-
   db.teams.map(
     t=>
-
     `<div class="teamline">
 
     <img
@@ -1438,13 +1313,10 @@ function render(){
     </div>
 
     <hr>`
-
   ).join('');
 
 
-
   const sortedTeams=
-
   [...db.teams].sort(
     (a,b)=>
     (b.score||0)-
@@ -1453,10 +1325,8 @@ function render(){
 
 
   teamRanking.innerHTML=
-
   sortedTeams.map(
     (t,index)=>
-
     `<tr>
 
     <td>
@@ -1485,13 +1355,10 @@ function render(){
     </td>
 
     </tr>`
-
   ).join('');
 
 
-
   const sortedStudents=
-
   [...db.students].sort(
     (a,b)=>
     (b.score||0)-
@@ -1500,10 +1367,8 @@ function render(){
 
 
   studentRanking.innerHTML=
-
   sortedStudents.map(
     (s,index)=>
-
     `<tr>
 
     <td>
@@ -1528,37 +1393,27 @@ function render(){
     </td>
 
     </tr>`
-
   ).join('');
 
 
-
   history.innerHTML=
-
   db.history.length
-
   ?
-
   db.history.map(
     h=>
-
     `<p>
     <b>${esc(h.name)}</b>
     　${esc(h.result)}
     　<span class="small">${esc(h.time)}</span>
     </p>`
-
   ).join('')
-
   :
-
   '<p class="small">履歴はありません</p>';
 
 
   renderBatter();
 
 }
-
 
 
 /* =========================
@@ -1568,22 +1423,18 @@ function render(){
 function renderBatter(){
 
   const s=
-
   db.students.find(
     x=>x.id===batter.value
   );
 
-
   if(!s){
 
-    batterTeam.innerHTML=
-    '';
+    batterTeam.innerHTML='';
 
     todayStatus.innerHTML=
     '生徒を選択してください';
 
-    spin.disabled=
-    true;
+    spin.disabled=true;
 
     return;
 
@@ -1595,7 +1446,6 @@ function renderBatter(){
 
 
   batterTeam.innerHTML=
-
   `<img
   src="${t?.logo||placeholder}"
   alt=""
@@ -1630,19 +1480,18 @@ batter.onchange=
 renderBatter;
 
 
-
 /* =========================
    ルーレット
 ========================= */
 
-let currentRotation=
-0;
+let currentRotation=0;
+
+let spinning=false;
 
 
 spin.onclick=()=>{
 
   const s=
-
   db.students.find(
     x=>x.id===batter.value
   );
@@ -1650,7 +1499,8 @@ spin.onclick=()=>{
 
   if(
     !s||
-    played(s)
+    played(s)||
+    spinning
   ){
 
     return;
@@ -1658,63 +1508,82 @@ spin.onclick=()=>{
   }
 
 
-  spin.disabled=
-  true;
+  spinning=true;
 
+  spin.disabled=true;
+
+
+  /*
+  先に結果を決定。
+  ルーレットはこの結果のマスへ停止する。
+  */
 
   const o=
   pick();
 
 
-  const targetAngle=
+  /*
+  マス中央から±18度だけランダム化。
 
-  o.start+
+  マス幅60度に対し、
+  境界から12度以上離れるため
+  判定ズレが起きない。
+  */
 
-  Math.random()*
-  (o.end-o.start);
-
-
-  const currentNormalized=
-
+  const safeOffset=
   (
-    (
-      currentRotation%
-      360
-    )+
-    360
-  )%
-  360;
+    Math.random()*36
+  )-18;
 
 
-  const targetNormalized=
+  const selectedAngle=
+  o.center+
+  safeOffset;
 
+
+  /*
+  conic-gradientは12時方向が0度。
+
+  針も12時方向。
+
+  selectedAngle地点を
+  0度へ移動させる。
+  */
+
+  const targetRotation=
   (
     360-
-    targetAngle
-  )%
-  360;
+    selectedAngle
+  )%360;
 
 
-  const extraRotation=
-
-  1440+
-
+  const normalizedCurrent=
   (
     (
-      targetNormalized-
-      currentNormalized+
-      360
-    )%
+      currentRotation%360
+    )+
     360
-  );
+  )%360;
 
+
+  const delta=
+  (
+    targetRotation-
+    normalizedCurrent+
+    360
+  )%360;
+
+
+  /*
+  5回転＋停止位置
+  */
 
   currentRotation+=
-  extraRotation;
+  1800+
+  delta;
 
 
   wheel.style.transform=
-
   `rotate(${currentRotation}deg)`;
 
 
@@ -1761,7 +1630,6 @@ spin.onclick=()=>{
 
 
     const msg=
-
     o.msg[
       Math.floor(
         Math.random()*
@@ -1771,7 +1639,6 @@ spin.onclick=()=>{
 
 
     const lastResult=
-
 `⚾ ${s.name}が打席に立ちました！
 ルーレットの結果は──
 
@@ -1791,7 +1658,6 @@ ${t?.name||'未所属'}　＋${o.pt}P`;
 
 
     totals.textContent=
-
     `個人累計：${s.score}pt ／ チーム累計：${t?.score||0}pt`;
 
 
@@ -1799,12 +1665,14 @@ ${t?.name||'未所属'}　＋${o.pt}P`;
     lastResult;
 
 
+    spinning=false;
+
+
     save();
 
   },2200);
 
 };
-
 
 
 /* =========================
@@ -1836,7 +1704,6 @@ async()=>{
   );
 
 };
-
 
 
 /* =========================
@@ -1886,8 +1753,7 @@ addStudent.onclick=()=>{
   });
 
 
-  studentName.value=
-  '';
+  studentName.value='';
 
 
   save();
@@ -1904,7 +1770,6 @@ window.delStudent=id=>{
   ){
 
     db.students=
-
     db.students.filter(
       s=>s.id!==id
     );
@@ -1915,7 +1780,6 @@ window.delStudent=id=>{
   }
 
 };
-
 
 
 /* =========================
@@ -1950,8 +1814,7 @@ addTeam.onclick=()=>{
   });
 
 
-  teamName.value=
-  '';
+  teamName.value='';
 
 
   save();
@@ -2042,7 +1905,6 @@ window.delTeam=id=>{
 
 
   db.teams=
-
   db.teams.filter(
     t=>t.id!==id
   );
@@ -2055,8 +1917,7 @@ window.delTeam=id=>{
         s.teamId===id
       ){
 
-        s.teamId=
-        '';
+        s.teamId='';
 
       }
 
@@ -2067,7 +1928,6 @@ window.delTeam=id=>{
   save();
 
 };
-
 
 
 /* =========================
@@ -2090,8 +1950,7 @@ resetToday.onclick=()=>{
   db.students.forEach(
     s=>{
 
-      s.lastPlayed=
-      '';
+      s.lastPlayed='';
 
     }
   );
@@ -2118,8 +1977,7 @@ resetScores.onclick=()=>{
   db.students.forEach(
     s=>{
 
-      s.score=
-      0;
+      s.score=0;
 
     }
   );
@@ -2128,15 +1986,13 @@ resetScores.onclick=()=>{
   db.teams.forEach(
     t=>{
 
-      t.score=
-      0;
+      t.score=0;
 
     }
   );
 
 
-  db.history=
-  [];
+  db.history=[];
 
 
   save();
@@ -2187,7 +2043,6 @@ resetAll.onclick=()=>{
   render();
 
 };
-
 
 
 /* =========================

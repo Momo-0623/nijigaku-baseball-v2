@@ -146,6 +146,12 @@ textarea{
   place-items:center;
 }
 
+.wheel-stage{
+  position:relative;
+  display:grid;
+  place-items:center;
+}
+
 .wheel{
   position:relative;
   width:min(360px,80vw);
@@ -153,12 +159,12 @@ textarea{
   border-radius:50%;
 
   background:conic-gradient(
-    #c91f28 0deg 60deg,
-    #3c4147 60deg 120deg,
-    #555 120deg 180deg,
-    #16864d 180deg 240deg,
-    #1762b0 240deg 300deg,
-    #ed9411 300deg 360deg
+    #c42f32 0deg 72deg,
+    #3c4147 72deg 162deg,
+    #595959 162deg 252deg,
+    #3d8d56 252deg 306deg,
+    #3165ad 306deg 324deg,
+    #e89b2f 324deg 360deg
   );
 
   border:8px solid #fff;
@@ -181,37 +187,42 @@ textarea{
   text-shadow:0 2px 4px #000a;
   z-index:2;
   white-space:nowrap;
-  transform:translate(-50%,-50%);
+
+  transform:
+    translate(-50%,-50%)
+    rotate(calc(var(--wheel-rotation, 0deg) * -1));
+
+  transition:transform 2.2s cubic-bezier(.1,.7,.1,1);
 }
 
 .label-1{
-  left:69%;
-  top:19%;
+  left:68.8%;
+  top:24.1%;
 }
 
 .label-2{
-  left:81%;
-  top:50%;
+  left:78.5%;
+  top:64.5%;
 }
 
 .label-3{
-  left:69%;
-  top:81%;
+  left:35.5%;
+  top:78.5%;
 }
 
 .label-4{
-  left:31%;
-  top:81%;
+  left:18.4%;
+  top:45%;
 }
 
 .label-5{
-  left:19%;
-  top:50%;
+  left:27.4%;
+  top:27.4%;
 }
 
 .label-6{
-  left:31%;
-  top:19%;
+  left:40.1%;
+  top:19.6%;
 }
 
 .wheel img{
@@ -389,6 +400,8 @@ th{
 
 <div class="pointer">▼</div>
 
+<div class="wheel-stage">
+
 <div id="wheel" class="wheel">
 
 <span class="wheel-label label-1">三振</span>
@@ -399,6 +412,8 @@ th{
 <span class="wheel-label label-6">ホームラン</span>
 
 <img src="assets/baseball.png" alt="">
+
+</div>
 
 </div>
 
@@ -608,6 +623,8 @@ const outcomes=[
 name:'三振',
 p:20,
 pt:0,
+start:0,
+end:72,
 msg:[
 '空振り三振！バットが空を切った！',
 '最後の一球を捉えきれず、三振！'
@@ -618,6 +635,8 @@ msg:[
 name:'アウト',
 p:25,
 pt:0,
+start:72,
+end:162,
 msg:[
 '打球は守備の正面へ。アウト！',
 '惜しい当たりも、ここはアウト！'
@@ -628,6 +647,8 @@ msg:[
 name:'ヒット',
 p:25,
 pt:1,
+start:162,
+end:252,
 msg:[
 '鋭い打球が野手の間を抜けた！',
 '綺麗に運んだ一打、ヒット！'
@@ -638,6 +659,8 @@ msg:[
 name:'二塁打',
 p:15,
 pt:2,
+start:252,
+end:306,
 msg:[
 '打球は外野を抜け、一気に二塁へ！',
 '長打コース！悠々と二塁到達！'
@@ -648,6 +671,8 @@ msg:[
 name:'三塁打',
 p:5,
 pt:3,
+start:306,
+end:324,
 msg:[
 '快足を飛ばして三塁へ！三塁打！',
 '外野を深々と破る一打！三塁まで到達！'
@@ -658,6 +683,8 @@ msg:[
 name:'ホームラン',
 p:10,
 pt:5,
+start:324,
+end:360,
 msg:[
 '綺麗な放物線を描いた打球は、そのままスタンドへ！',
 '高く舞い上がった打球はフェンスの向こうへ！'
@@ -668,8 +695,8 @@ msg:[
 
 
 let db=load();
-
 let lastResult=null;
+let currentRotation=0;
 
 
 function seed(){
@@ -1065,16 +1092,35 @@ spin.disabled=true;
 let o=pick();
 
 
-let rot=
+const targetAngle=
+o.start+
+Math.random()*(o.end-o.start);
 
+
+const currentNormalized=
+((currentRotation%360)+360)%360;
+
+
+const targetNormalized=
+(360-targetAngle)%360;
+
+
+const extraRotation=
 1440+
+((targetNormalized-currentNormalized+360)%360);
 
-Math.floor(Math.random()*360);
+
+currentRotation+=extraRotation;
+
+
+wheel.style.setProperty(
+'--wheel-rotation',
+`${currentRotation}deg`
+);
 
 
 wheel.style.transform=
-
-`rotate(${rot}deg)`;
+`rotate(${currentRotation}deg)`;
 
 
 setTimeout(()=>{
@@ -1135,17 +1181,12 @@ Math.random()*o.msg.length
 lastResult=
 
 `⚾ ${s.name}が打席に立ちました！
-
 ルーレットの結果は──
-
 
 【 ${o.name.toUpperCase()}！ 】
 
-
 ${msg}
-
 ${s.name}　＋${o.pt}P
-
 ${t?.name||'未所属'}　＋${o.pt}P`;
 
 
@@ -1382,6 +1423,7 @@ if(confirm('全データを初期化します。元に戻せません。')){
 
 db=seed();
 
+
 save();
 
 }
@@ -1394,5 +1436,4 @@ renderAll();
 </script>
 
 </body>
-
 </html>
